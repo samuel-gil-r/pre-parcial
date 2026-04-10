@@ -7,7 +7,6 @@ import com.sportlife.core.services.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +34,7 @@ public class CartController {
     @Operation(summary = "Agregar producto al carrito")
     @PostMapping("/items")
     public ResponseEntity<CartResponse> addItem(
-            @Valid @RequestBody AddCartItemRequest request,
+            @RequestBody AddCartItemRequest request,
             @AuthenticationPrincipal UserDetails userDetails) {
         UUID userId = UUID.fromString(userDetails.getUsername());
         log.info("POST /api/cart/items - userId={}, productId={}", userId, request.getProductId());

@@ -8,7 +8,6 @@ import com.sportlife.controller.mappers.UserControllerMapper;
 import com.sportlife.core.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,7 +29,7 @@ public class AuthController {
 
     @Operation(summary = "Registrar nuevo usuario")
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<UserResponse> register(@RequestBody RegisterRequest request) {
         log.info("POST /api/auth/register - email={}", request.getEmail());
         var model = authService.register(userControllerMapper.toModel(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(userControllerMapper.toResponse(model));
@@ -38,7 +37,7 @@ public class AuthController {
 
     @Operation(summary = "Login de usuario, devuelve JWT")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         log.info("POST /api/auth/login - email={}", request.getEmail());
         String token = authService.login(request.getEmail(), request.getPassword());
         return ResponseEntity.ok(new LoginResponse(token));

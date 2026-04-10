@@ -32,8 +32,8 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public UserModel register(UserModel userModel) {
         log.info("Registrando usuario: {}", userModel.getEmail());
+        userValidator.validateRegisterFields(userModel.getName(), userModel.getEmail(), userModel.getPassword());
         userValidator.validateEmailUnique(userModel.getEmail());
-        userValidator.validatePasswordStrength(userModel.getPassword());
 
         userModel.setPassword(passwordUtil.encode(userModel.getPassword()));
         userModel.setRole(Role.USER);
@@ -47,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String login(String email, String password) {
         log.info("Intento de login: {}", email);
+        userValidator.validateLoginFields(email, password);
         var entity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Credenciales inválidas"));
 

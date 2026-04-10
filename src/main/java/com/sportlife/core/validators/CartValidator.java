@@ -12,6 +12,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class CartValidator {
 
+    public void validateAddItemRequest(java.util.UUID productId, int quantity) {
+        if (productId == null) {
+            throw new ValidationException("El productId es obligatorio");
+        }
+        if (quantity < 1) {
+            throw new ValidationException("La cantidad debe ser al menos 1");
+        }
+    }
+
     public void validateStock(int requestedQuantity, int availableStock, String productName) {
         log.debug("Validando stock para '{}': solicitado={}, disponible={}", productName, requestedQuantity, availableStock);
         if (requestedQuantity > availableStock) {

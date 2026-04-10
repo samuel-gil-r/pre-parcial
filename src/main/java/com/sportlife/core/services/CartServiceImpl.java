@@ -33,6 +33,7 @@ public class CartServiceImpl implements CartService {
     public CartModel addItem(UUID userId, UUID productId, int quantity) {
         log.info("Agregando al carrito. userId={}, productId={}, qty={}", userId, productId, quantity);
 
+        cartValidator.validateAddItemRequest(productId, quantity);
         var product = productValidator.validateExistsAndActive(productId);
         cartValidator.validateStock(quantity, product.getStock(), product.getName());
 

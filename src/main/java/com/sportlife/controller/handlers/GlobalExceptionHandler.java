@@ -7,7 +7,6 @@ import com.sportlife.core.utils.exceptions.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -45,16 +44,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handlePayment(PaymentException ex) {
         log.warn("PaymentException: {}", ex.getMessage());
         return buildResponse(HttpStatus.PAYMENT_REQUIRED, ex.getMessage());
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleBeanValidation(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult().getFieldErrors().stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                .findFirst()
-                .orElse("Error de validación");
-        log.warn("Bean validation failed: {}", message);
-        return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(Exception.class)
